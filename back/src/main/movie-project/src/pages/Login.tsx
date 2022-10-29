@@ -34,11 +34,11 @@ const LoginContent = styled.div`
 `;
 
 const LoginInput = styled.input`
-  width: 100%;
+  width: 95%;
   height: 15%;
   margin-bottom: 1rem;
   padding-left: 1rem;
-  border: 1px solid black;
+  border: 1px solid #667080;
   border-radius: 0.5rem;
   font-size: 1.2rem;
 `;
@@ -51,13 +51,10 @@ const LoginLabel = styled.h3`
 `;
 
 const LoginBtn = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 15%;
   margin-top: 1rem;
-  border: 1px solid black;
+  border: 1px solid #667080;
   border-radius: 0.5rem;
   font-size: 1.2rem;
   color: white;
