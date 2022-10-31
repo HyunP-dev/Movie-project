@@ -12,7 +12,23 @@ spring:
       ddl-auto: create
     show-sql: true
 
+naver:
+  url:
+    search:
+      movie: https://openapi.naver.com/v1/search/local.json
 
-  movie:
+    client:
+      id: 13De2BDkkPwBrZddTNyQ
+      secret: 5z043okjEz
+    movie:
     box:
       key: 38b6115a994d498ad200a534627cf969
+  servlet:
+    multipart:
+      enabled: true
+      location: D:\\fileupload
+      max-file-size: 10MB
+      max-request-size: 30MB
+
+file:
+  path: D:\\fileupload

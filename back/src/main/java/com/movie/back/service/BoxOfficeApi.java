@@ -4,6 +4,10 @@ package com.movie.back.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.back.data.BoxOfficeRequest;
+import com.movie.back.data.BoxOfficeResponse;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,13 +21,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BoxOfficeApi {
 
-    @Value("${spring.movie.box.key}")
+//    @Value("${spring.movie.box.key}")
     private String key;
 
-    public  ArrayList<Map>  boxOfficeGet(BoxOfficeRequest request) throws JsonProcessingException {
+    private final ImageService imageService;
+
+    public  ArrayList<BoxOfficeResponse>  boxOfficeGet(BoxOfficeRequest request) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
+        ArrayList<BoxOfficeResponse> res = new ArrayList<>();
         request.setKey(key);
         request.setTargetDt(LocalDateTime
                 .now()
@@ -37,9 +45,6 @@ public class BoxOfficeApi {
                 .build()
                 .encode()
                 .toUri();
-        System.out.println(request.toMultiValueMap());
-        System.out.println(uri.toString());
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -52,9 +57,18 @@ public class BoxOfficeApi {
                 String.class
         );
         LinkedHashMap lm = (LinkedHashMap) mapper.readValue(responseEntity.getBody(), java.util.Map.class).get("boxOfficeResult");
-        ArrayList<java.util.Map> list = (ArrayList<Map>)lm.get("weeklyBoxOfficeList");
-
-        return list;
+        ArrayList<java.util.Map<String,String>> list = (ArrayList<Map<String,String>>)lm.get("weeklyBoxOfficeList");
+        list.forEach(map ->{
+                res.add(BoxOfficeResponse.builder().
+                        rank(map.get("rank"))
+                        .rankOldAndNew(map.get("rankOldAndNew"))
+                        .movieNm(map.get("movieNm"))
+                        .audiCnt("audiCnt")
+                        .auidAcc("auidAcc")
+                        .resource(imageService.viewFileGet(map.get("rank").trim()+".jpg"))
+                        .build());
+        });
+        return res;
     }
 
 }
