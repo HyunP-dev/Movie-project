@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
   *{
     box-sizing: border-box;
-    font-family: 'EF_Diary';
   }
   body{
     background-color: #FFFFFF;
@@ -32,10 +31,6 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
-  @font-face {
-    font-family: 'EF_Diary';
-    src: url('public/fonts/EF_Diary.ttf');
-  }
 `;
 
 export default GlobalStyle;
