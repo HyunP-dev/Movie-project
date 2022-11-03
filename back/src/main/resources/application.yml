@@ -12,6 +12,9 @@ spring:
       ddl-auto: create
     show-sql: true
 
+KMDB:
+  key: 4U6V83F44L7Y8VNLF42B
+
 naver:
   url:
     search:

@@ -1,6 +1,10 @@
 package com.movie.back.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movie.back.data.KMDB.MovieRequest;
+import com.movie.back.data.KMDB.MovieResponse;
 import com.movie.back.data.NaverRequest;
 import com.movie.back.data.NaverResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -21,6 +27,9 @@ public class NaverService {
             private String naverClientId;
             @Value("${naver.url.client.secret}")
             private String naverSecret;
+
+            @Value("${KMDB.key}")
+            private String KMDBKey;
 
             public NaverResponse localSearch(NaverRequest request){
                 var uri = UriComponentsBuilder
@@ -44,5 +53,29 @@ public class NaverService {
                         responseType
                 );
                 return responseentity.getBody();
+            }
+
+            public Map movieResponse(MovieRequest request) throws JsonProcessingException {
+                ObjectMapper mapper =new ObjectMapper();
+                request.setServiceKey(KMDBKey);
+                var uri = UriComponentsBuilder
+                        .fromUriString("http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp")
+                        .queryParams(request.toMultiValueMap())
+                        .build()
+                        .encode()
+                        .toUri();
+
+                System.out.println(uri);
+          //      var responseType = new ParameterizedTypeReference<MovieResponse>(){};
+                ResponseEntity<String> responseentity = new RestTemplate().exchange(
+                        uri,
+                        HttpMethod.GET,
+                        null,
+                        String.class
+                );
+
+                LinkedHashMap lm = (LinkedHashMap) mapper.readValue(responseentity.getBody(),Map.class);
+                return lm;
+
             }
 }

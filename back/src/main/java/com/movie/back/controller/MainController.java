@@ -3,10 +3,12 @@ package com.movie.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.movie.back.data.BoxOfficeRequest;
 import com.movie.back.data.BoxOfficeResponse;
+import com.movie.back.data.KMDB.MovieRequest;
 import com.movie.back.dto.MovieDTO;
 import com.movie.back.entity.Movie;
 import com.movie.back.service.BoxOfficeApi;
 import com.movie.back.service.ImageService;
+import com.movie.back.service.NaverService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -26,9 +28,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MainController {
 
+    private final NaverService service;
     @GetMapping("/api/test")
     public String get(){
         return "요청성공!??!?!?!";
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public Map searchMovie(@RequestParam String query) throws JsonProcessingException {
+                    return service.movieResponse(MovieRequest.builder().query(query).build());
     }
 
     @ApiOperation(value = "MOVIE All GET",notes = "GET 방식으로 전체조회")
