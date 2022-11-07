@@ -1,18 +1,28 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Main = () => {
+  const [movie, setMovie] = useState([]);
   useEffect(() => {
-    fetch('/mvi/search?query="세얼간이"')
+    fetch('/mvi/box')
       .then(res => res.json())
-      .then(data => console.log(data));
+      .then(data => setMovie(data));
   }, []);
 
   return (
     <MainWrapper>
       <MainTopText>Lorem ipsum</MainTopText>
       <MovieListWrapper>
-        {/* <Card width={'10rem'} height={'13rem'} /> */}
+        {movie?.map((props, idx) => (
+          <Link
+            key={idx}
+            to={'/detail'}
+            state={{ image: props?.image, title: props?.title }}
+          >
+            <MovieImg src={props.image} alt="1" />
+          </Link>
+        ))}
       </MovieListWrapper>
     </MainWrapper>
   );
@@ -38,4 +48,9 @@ const MovieListWrapper = styled.div`
   width: 100%;
   height: 80vh;
   border: 1px solid black;
+`;
+
+const MovieImg = styled.img`
+  width: 200px;
+  height: 400px;
 `;
