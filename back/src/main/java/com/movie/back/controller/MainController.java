@@ -6,10 +6,12 @@ import com.movie.back.data.BoxOfficeResponse;
 import com.movie.back.data.KMDB.MovieRequest;
 import com.movie.back.data.NaverRequest;
 import com.movie.back.data.NaverResponse;
+import com.movie.back.dto.BoxInfoDTO;
 import com.movie.back.dto.MovieDTO;
 import com.movie.back.entity.Movie;
 import com.movie.back.service.BoxOfficeApi;
 import com.movie.back.service.ImageService;
+import com.movie.back.service.MovieDataService;
 import com.movie.back.service.NaverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -33,6 +35,8 @@ public class MainController {
 
     private final BoxOfficeApi boxOfficeApi;
     private final NaverService naverService;
+
+    private final MovieDataService movieDataService;
     @GetMapping("/api/test")
     public String get(){
         return "요청성공!??!?!?!";
@@ -46,28 +50,17 @@ public class MainController {
 
 //     @ApiOperation(value = "MOVIE All GET",notes = "GET 방식으로 BoxOffice 순위 10개 조회한다.")
     @GetMapping(path = "/box")    //전체 데이터 조회
-    public ResponseEntity<List<NaverResponse.Items>> readAll() throws JsonProcessingException {
-            List<NaverResponse.Items> responses = new ArrayList<>();
-            boxOfficeApi
-                    .boxOfficeGet(new BoxOfficeRequest())
-                    .forEach(boxOfficeResponse -> {
-                        responses.addAll(
-                                naverService.movieSearch(NaverRequest.builder()
-                                        .query(boxOfficeResponse.getMovieNm())
-                                        .build()).getItems()
-                                        .stream().filter(items -> items.getUserRating() > 5.0).collect(Collectors.toList())
-                        );
-                    });
+    public ResponseEntity<List<BoxInfoDTO>> readAll(){
 
 
-            return ResponseEntity.ok(responses);
+            return ResponseEntity.ok(movieDataService.boxInfoDTOList());
     }
 
 //     @ApiOperation(value = "MOVIE ONE GET",notes = "GET 방식으로 하나조회")
     @GetMapping(value="/box/read")
     public ResponseEntity<Map> read(@RequestParam String name) throws JsonProcessingException {
 
-        System.out.println(name.substring(0,name.indexOf(':')));
+        System.out.println(name);
 
 
             return ResponseEntity.ok( naverService
