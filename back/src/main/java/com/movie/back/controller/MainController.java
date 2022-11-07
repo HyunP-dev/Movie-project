@@ -63,9 +63,10 @@ public class MainController {
 
             return ResponseEntity.ok(responses);
     }
+
     @ApiOperation(value = "MOVIE ONE GET",notes = "GET 방식으로 하나조회")
-    @GetMapping(value="/{movieId}")
-    public ResponseEntity<MovieDTO> read(@PathVariable("movieId") Long movieId){
+    @GetMapping(value="/box/read")
+    public ResponseEntity<MovieDTO> read(@RequestParam Long movieId){
             return ResponseEntity.ok(new MovieDTO());
     }
 
