@@ -6,6 +6,7 @@ import 'react-round-carousel/src/index.css';
 
 const Main = () => {
   const [movie, setMovie] = useState([]);
+
   useEffect(() => {
     fetch('/mvi/box')
       .then(res => res.json())
@@ -18,47 +19,24 @@ const Main = () => {
       alt: 'movie poster',
       image: props.image,
       content: (
-        <div>
-          <strong>{props.title}</strong>
-          <Link
-            key={index}
-            to={'/detail'}
-            state={{ image: props?.image, title: props?.title }}
-          >
-            <MovieImg src={props.image} alt="1" />
-          </Link>
-        </div>
+        <Link
+          key={index}
+          to={'/detail'}
+          state={{ image: props?.image, title: props?.title }}
+        >
+          <MovieTitle>
+            {props.title.substr(3, props.title.length - 7)}
+          </MovieTitle>
+        </Link>
       ),
     })
   );
-  // const MovieCarousel: CarouselItem[] = Array(8)
-  //   .fill('')
-  //   .map((props: string, index: number) => ({
-  //     alt: 'A random photo',
-  //     image: `https://picsum.photos/${210 + index}`,
-  //     content: (
-  //       <div>
-  //         <strong>Round Carousel</strong>
-  //         <span>Slide number {index + 1}</span>
-  //       </div>
-  //     ),
-  //   }));
 
   return (
     <>
       <MainWrapper>
         <MainTopText>Lorem ipsum</MainTopText>
-        <MovieListWrapper>
-          {/* {movie?.map((props, idx) => (
-            <Link
-              key={idx}
-              to={'/detail'}
-              state={{ image: props?.image, title: props?.title }}
-            >
-              <MovieImg src={props.image} alt="1" />
-            </Link>
-          ))} */}
-        </MovieListWrapper>
+        <MovieListWrapper />
       </MainWrapper>
       <Carousel items={movieTest} itemWidth={500} />
     </>
@@ -86,7 +64,7 @@ const MovieListWrapper = styled.div`
   height: 30vh;
 `;
 
-const MovieImg = styled.img`
-  width: 200px;
-  height: 400px;
+const MovieTitle = styled.strong`
+  width: 100%;
+  margin: auto;
 `;
