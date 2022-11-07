@@ -1,20 +1,28 @@
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { Carousel, CarouselItem } from 'react-round-carousel';
 
 const Detail = () => {
   const location = useLocation();
+  const [movieData, setMovieData] = useState([]);
   const movieTitle = location.state.title.substr(
     3,
     location.state.title.length - 7
   );
-  fetch(`/mvi/box/read?name=${movieTitle}`)
-    .then(res => res.json())
-    .then(data => console.log(data));
+  useEffect(() => {
+    fetch(`/mvi/box/read?name=${movieTitle}`)
+      .then(res => res.json())
+      .then(data => setMovieData(data));
+  }, []);
+  const plots =
+    movieData?.Result && movieData?.Result[0].plots.plot[0].plotText;
 
   return (
     <div>
       <h1>{movieTitle}</h1>
       <ImageWrapper src={location.state.image} />
+      <p>{plots}</p>
     </div>
   );
 };
