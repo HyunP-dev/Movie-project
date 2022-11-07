@@ -24,6 +24,8 @@ public class MovieRequest {
                 map.add("ServiceKey", serviceKey);
                 map.add("detail", "Y");
                 map.add("query", query);
+                //map.add("sort","title");
+                map.add("releaseDts","20220101");
 
                 return map;
         }

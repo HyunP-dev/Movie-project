@@ -3,6 +3,7 @@ package com.movie.back.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.movie.back.data.KMDB.MovieRequest;
 import com.movie.back.data.NaverRequest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,12 +20,17 @@ class NaverServiceTest {
 
     @Test
     public void test(){
-        System.out.println( service.localSearch(NaverRequest.builder().query("반도").build()));
+        System.out.println( service.movieSearch(NaverRequest.builder().query("반도").build()));
 
     }
 
     @Test
     public void 테스트() throws JsonProcessingException {
         System.out.println(service.movieResponse(new MovieRequest()));
+    }
+    @Test
+    @DisplayName("")
+    public void 이미지테스트() throws JsonProcessingException {
+        System.out.println(service.imageSearch("test"));
     }
 }

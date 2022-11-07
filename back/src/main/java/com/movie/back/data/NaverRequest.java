@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -22,12 +25,12 @@ public class NaverRequest {
 
         public MultiValueMap<String,String> toMultiValueMap(){
                 var map = new LinkedMultiValueMap<String,String>();
-
                 map.add("query", query);
-                map.add("genre",genre);
-                map.add("country", country);
-                map.add("yearfrom", yearfrom);
-                map.add("yearto", yearto);
+                map.add("display","5");
+                map.add("start","1");
+                map.add("yearfrom","2021");
+                map.add("yearto","2023");
+
 
                 return map;
         }

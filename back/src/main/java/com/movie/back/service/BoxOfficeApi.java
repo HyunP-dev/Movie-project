@@ -8,6 +8,7 @@ import com.movie.back.data.BoxOfficeResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BoxOfficeApi {
 
-//    @Value("${spring.movie.box.key}")
+    @Value("${movie.box.key}")
     private String key;
 
     private final ImageService imageService;
@@ -33,12 +35,15 @@ public class BoxOfficeApi {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<BoxOfficeResponse> res = new ArrayList<>();
         request.setKey(key);
+
         request.setTargetDt(LocalDateTime
                 .now()
                 .minusDays(7L)
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 .toString());
-        System.out.println(LocalDateTime.now().minusDays(7L).format(DateTimeFormatter.ofPattern("yyyyMMdd")).toString());
+
+        log.info(LocalDateTime.now().minusDays(7L).format(DateTimeFormatter.ofPattern("yyyyMMdd")).toString());
+
         var uri = UriComponentsBuilder
                 .fromUriString("http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json")
                 .queryParams(request.toMultiValueMap())

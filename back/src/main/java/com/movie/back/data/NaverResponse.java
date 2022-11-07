@@ -1,9 +1,6 @@
 package com.movie.back.data;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -17,9 +14,9 @@ public class NaverResponse {
         private Integer display;
         private List<Items> items;
 
-       @Data
+        @Data
         @NoArgsConstructor
-        static class Items{
+        public static class Items{
                 private String title;   //영화제목
                 private String link;    //네이버에서 확인할 수있는 영화정보 url
                 private String image;   //섬네일 이미지 링크

@@ -31,7 +31,7 @@ public class BoxOfficeRequest {
 
         map.add("key",key);
         map.add("targetDt",targetDt);
-        map.add("itemPerPage","10");
+        map.add("itemPerPage","15");
 
         return map;
     }

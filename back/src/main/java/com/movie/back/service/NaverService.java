@@ -3,6 +3,7 @@ package com.movie.back.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movie.back.data.ImageResponse;
 import com.movie.back.data.KMDB.MovieRequest;
 import com.movie.back.data.KMDB.MovieResponse;
 import com.movie.back.data.NaverRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,14 +33,14 @@ public class NaverService {
             @Value("${KMDB.key}")
             private String KMDBKey;
 
-            public NaverResponse localSearch(NaverRequest request){
+            public NaverResponse movieSearch(NaverRequest request){
+
                 var uri = UriComponentsBuilder
                         .fromUriString("https://openapi.naver.com/v1/search/movie.json")
                         .queryParams(request.toMultiValueMap())
                         .build()
                         .encode()
                         .toUri();
-
                 var headers =new HttpHeaders();
                 headers.set("X-Naver-Client-Id", naverClientId);
                 headers.set("X-Naver-Client-Secret", naverSecret);
@@ -55,7 +57,7 @@ public class NaverService {
                 return responseentity.getBody();
             }
 
-            public Map movieResponse(MovieRequest request) throws JsonProcessingException {
+            public ArrayList<Map> movieResponse(MovieRequest request) throws JsonProcessingException {
                 ObjectMapper mapper =new ObjectMapper();
                 request.setServiceKey(KMDBKey);
                 var uri = UriComponentsBuilder
@@ -75,7 +77,33 @@ public class NaverService {
                 );
 
                 LinkedHashMap lm = (LinkedHashMap) mapper.readValue(responseentity.getBody(),Map.class);
-                return lm;
+                //ArrayList<Map> list = (ArrayList<Map>)lm.get("Data"); //받을 키를 입력하면도니다 .
+                // LinkedHashMap map = (LinkedHashMap) lm.get("Data");
+                ArrayList<Map> list = (ArrayList<Map>) lm.get("Data");
+
+                 return list;
 
             }
+
+    public ImageResponse imageSearch(String imageName){
+            var uri = UriComponentsBuilder
+                    .fromUriString("https://openapi.naver.com/v1/search/image")
+                    .queryParam("query",imageName+" 포스터")
+                    .queryParam("display","3")
+                    .build()
+                    .encode()
+                    .toUri();
+            var headers =new HttpHeaders();
+            headers.set("X-Naver-Client-Id", naverClientId);
+            headers.set("X-Naver-Client-Secret", naverSecret);
+            var httpEntity = new HttpEntity<>(headers);
+            var responseType = new ParameterizedTypeReference<ImageResponse>(){};
+            ResponseEntity<ImageResponse> responseentity = new RestTemplate().exchange(
+                    uri,
+                    HttpMethod.GET,
+                    httpEntity,
+                    responseType
+            );
+            return responseentity.getBody();
+    }
 }
