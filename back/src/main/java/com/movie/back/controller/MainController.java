@@ -63,10 +63,17 @@ public class MainController {
 
             return ResponseEntity.ok(responses);
     }
+
     @ApiOperation(value = "MOVIE ONE GET",notes = "GET 방식으로 하나조회")
-    @GetMapping(value="/{movieId}")
-    public ResponseEntity<MovieDTO> read(@PathVariable("movieId") Long movieId){
-            return ResponseEntity.ok(new MovieDTO());
+    @GetMapping(value="/box/read")
+    public ResponseEntity<Map> read(@RequestParam String name) throws JsonProcessingException {
+
+
+
+            return ResponseEntity.ok( naverService
+                    .movieResponse(MovieRequest.builder()
+                            .query(name)
+                            .build()).stream().findFirst().get());
     }
 
 
