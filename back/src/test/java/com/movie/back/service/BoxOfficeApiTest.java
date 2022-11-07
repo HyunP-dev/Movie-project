@@ -111,7 +111,7 @@ class BoxOfficeApiTest {
                         boxInfoRepository.save(
                                 BoxInfo.builder()
                                         .title(items.getTitle())
-                                        .imageLink(items.getLink())
+                                        .imageLink(items.getImage())
                                         .rating(items.getUserRating().toString())
                                 .build()
                         );

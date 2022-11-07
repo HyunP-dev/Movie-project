@@ -1,7 +1,10 @@
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Carousel, CarouselItem } from 'react-round-carousel';
+
+interface MovieData {
+  Result: object[];
+}
 
 const Detail = () => {
   const location = useLocation();

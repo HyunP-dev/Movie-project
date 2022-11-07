@@ -4,6 +4,12 @@ import { useEffect, useState } from 'react';
 import { Carousel, CarouselItem } from 'react-round-carousel';
 import 'react-round-carousel/src/index.css';
 
+interface MovieData {
+  imageLink: string;
+  title: string;
+  rating: string;
+}
+
 const Main = () => {
   const [movie, setMovie] = useState([]);
 
@@ -11,22 +17,22 @@ const Main = () => {
     fetch('/mvi/box')
       .then(res => res.json())
       .then(data => setMovie(data));
-
-    console.log(movie);
   }, []);
+
   const movieTest: CarouselItem[] = movie?.map(
-    (props: string, index: number) => ({
+    (props: MovieData, index: number) => ({
       alt: 'movie poster',
-      image: props.image,
+      image: props.imageLink,
       content: (
         <Link
           key={index}
           to={'/detail'}
-          state={{ image: props?.image, title: props?.title }}
+          state={{ image: props?.imageLink, title: props?.title }}
         >
           <MovieTitle>
             {props.title.substr(3, props.title.length - 7)}
           </MovieTitle>
+          <MovieTitle>{props.rating}</MovieTitle>
         </Link>
       ),
     })
@@ -38,7 +44,7 @@ const Main = () => {
         <MainTopText>Lorem ipsum</MainTopText>
         <MovieListWrapper />
       </MainWrapper>
-      <Carousel items={movieTest} itemWidth={500} />
+      <Carousel items={movieTest} itemWidth={400} />
     </>
   );
 };
