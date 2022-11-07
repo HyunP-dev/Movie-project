@@ -11,7 +11,6 @@ import com.movie.back.entity.Movie;
 import com.movie.back.service.BoxOfficeApi;
 import com.movie.back.service.ImageService;
 import com.movie.back.service.NaverService;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.core.io.Resource;
@@ -45,7 +44,7 @@ public class MainController {
                     return naverService.movieResponse(MovieRequest.builder().query(query).build());
     }*/
 
-    @ApiOperation(value = "MOVIE All GET",notes = "GET 방식으로 BoxOffice 순위 10개 조회한다.")
+//     @ApiOperation(value = "MOVIE All GET",notes = "GET 방식으로 BoxOffice 순위 10개 조회한다.")
     @GetMapping(path = "/box")    //전체 데이터 조회
     public ResponseEntity<List<NaverResponse.Items>> readAll() throws JsonProcessingException {
             List<NaverResponse.Items> responses = new ArrayList<>();
@@ -64,7 +63,7 @@ public class MainController {
             return ResponseEntity.ok(responses);
     }
 
-    @ApiOperation(value = "MOVIE ONE GET",notes = "GET 방식으로 하나조회")
+//     @ApiOperation(value = "MOVIE ONE GET",notes = "GET 방식으로 하나조회")
     @GetMapping(value="/box/read")
     public ResponseEntity<Map> read(@RequestParam String name) throws JsonProcessingException {
 
@@ -77,12 +76,12 @@ public class MainController {
     }
 
 
-    @ApiOperation(value = "MOVIE POST",notes = "POST 요청")
+//     @ApiOperation(value = "MOVIE POST",notes = "POST 요청")
     @PostMapping(value = "",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody MovieDTO movieDTO){
             return ResponseEntity.ok("post");
     }
-    @ApiOperation(value = "MOVIE PUT",notes = "PUT 요청")
+//     @ApiOperation(value = "MOVIE PUT",notes = "PUT 요청")
     @PutMapping(value = "/{movieId}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MovieDTO> modify(
             @PathVariable("movieId") Long movieId,
@@ -90,7 +89,7 @@ public class MainController {
         return ResponseEntity.ok(new MovieDTO());
     }
 
-    @ApiOperation(value = "MOVIE DELETE",notes = "DELETE 요청")
+//     @ApiOperation(value = "MOVIE DELETE",notes = "DELETE 요청")
     @DeleteMapping(value = "/{movieId}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> remove(@PathVariable("movieId") Long movieId){
             return ResponseEntity.ok(1L);   //todo: 삭제한 PK가 날아가게
