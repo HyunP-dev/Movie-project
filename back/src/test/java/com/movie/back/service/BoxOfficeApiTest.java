@@ -66,7 +66,7 @@ class BoxOfficeApiTest {
     @DisplayName("KMDB 검색")
     public void test4() throws JsonProcessingException {
         ArrayList<Map> list = new ArrayList<>();
-        System.out.println(naverService.movieResponse(MovieRequest.builder().query("자백").build()));
+        System.out.println(naverService.movieResponse(MovieRequest.builder().query("블랙아담").build()));
 //                .forEach(map ->
 //                       // list.addAll((Collection<? extends Map>) map.get("Result"))
 //                    //Result만 걸러냄
