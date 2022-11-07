@@ -23,9 +23,13 @@ naver:
     client:
       id: 13De2BDkkPwBrZddTNyQ
       secret: 5z043okjEz
-    movie:
-    box:
-      key: 38b6115a994d498ad200a534627cf969
+
+
+movie:
+  box:
+    key: 38b6115a994d498ad200a534627cf969
+
+
   servlet:
     multipart:
       enabled: true
