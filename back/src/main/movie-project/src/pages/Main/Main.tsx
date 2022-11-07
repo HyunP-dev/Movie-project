@@ -1,20 +1,45 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { Carousel, CarouselItem } from 'react-round-carousel';
+import 'react-round-carousel/src/index.css';
 
 const Main = () => {
+  const [movie, setMovie] = useState([]);
+
   useEffect(() => {
-    fetch('/mvi/search?query="세얼간이"')
+    fetch('/mvi/box')
       .then(res => res.json())
-      .then(data => console.log(data));
+      .then(data => setMovie(data));
+
+    console.log(movie);
   }, []);
+  const movieTest: CarouselItem[] = movie?.map(
+    (props: string, index: number) => ({
+      alt: 'movie poster',
+      image: props.image,
+      content: (
+        <Link
+          key={index}
+          to={'/detail'}
+          state={{ image: props?.image, title: props?.title }}
+        >
+          <MovieTitle>
+            {props.title.substr(3, props.title.length - 7)}
+          </MovieTitle>
+        </Link>
+      ),
+    })
+  );
 
   return (
-    <MainWrapper>
-      <MainTopText>Lorem ipsum</MainTopText>
-      <MovieListWrapper>
-        {/* <Card width={'10rem'} height={'13rem'} /> */}
-      </MovieListWrapper>
-    </MainWrapper>
+    <>
+      <MainWrapper>
+        <MainTopText>Lorem ipsum</MainTopText>
+        <MovieListWrapper />
+      </MainWrapper>
+      <Carousel items={movieTest} itemWidth={500} />
+    </>
   );
 };
 
@@ -36,6 +61,10 @@ const MainTopText = styled.div`
 
 const MovieListWrapper = styled.div`
   width: 100%;
-  height: 80vh;
-  border: 1px solid black;
+  height: 30vh;
+`;
+
+const MovieTitle = styled.strong`
+  width: 100%;
+  margin: auto;
 `;
