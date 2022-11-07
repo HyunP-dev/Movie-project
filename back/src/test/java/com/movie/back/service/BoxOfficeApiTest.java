@@ -78,6 +78,14 @@ class BoxOfficeApiTest {
 
     }
 
+    @Test
+    public void test5() throws JsonProcessingException {
+        System.out.println( naverService
+                .movieResponse(MovieRequest.builder()
+                        .query("블랙아담")
+                        .build()).stream().findFirst().get());
+    }
+
 
 
 }

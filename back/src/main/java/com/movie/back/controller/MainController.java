@@ -68,6 +68,7 @@ public class MainController {
     @GetMapping(value="/box/read")
     public ResponseEntity<Map> read(@RequestParam String name) throws JsonProcessingException {
 
+        System.out.println(name.substring(0,name.indexOf(':')));
 
 
             return ResponseEntity.ok( naverService
