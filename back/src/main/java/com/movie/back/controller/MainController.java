@@ -69,6 +69,7 @@ public class MainController {
     public ResponseEntity<Map> read(@RequestParam String name) throws JsonProcessingException {
 
 
+
             return ResponseEntity.ok( naverService
                     .movieResponse(MovieRequest.builder()
                             .query(name)
