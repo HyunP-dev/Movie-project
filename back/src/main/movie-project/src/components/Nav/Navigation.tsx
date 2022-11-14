@@ -1,12 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BiUser } from 'react-icons/bi';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
+import { useLocation } from 'react-router-dom';
 
 const Navigation = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
   return (
     <NavWrapper>
-      <NavLogo src="https://upload.wikimedia.org/wikipedia/commons/8/85/Logo-Test.png" />
-      <NavSearchWrapper>
+      <h1>Logo</h1>
+      <NavSearchWrapper path={currentPath}>
         <NavSearchIcon />
         <NavSearch />
       </NavSearchWrapper>
@@ -21,40 +24,47 @@ const NavWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   height: 10vh;
-  border-bottom: 1px solid grey;
-`;
-
-const NavLogo = styled.img`
-  width: 20%;
-  height: 100%;
+  h1 {
+    color: #03af59;
+    font-size: 2rem;
+  }
 `;
 
 const NavSearchWrapper = styled.div`
+  ${props =>
+    props.path === '/login' ||
+    (props.path === '/signup' &&
+      css`
+        visibility: hidden;
+      `)}
   position: relative;
   display: flex;
   align-items: center;
-  width: 20%;
+  width: 25%;
   height: 100%;
+  margin-right: 1rem;
 `;
 
 const NavSearch = styled.input`
   width: 100%;
   height: 40%;
   padding-left: 2.5rem;
-  border: 1px solid grey;
+  border: 1px solid #03af59;
   border-radius: 1rem;
 `;
 
 const NavSearchIcon = styled(HiMagnifyingGlass)`
   position: absolute;
   left: 6%;
+  color: #03af59;
 `;
 
 const NavUserIcon = styled(BiUser)`
-  width: 20%;
+  font-size: 2rem;
   height: 40%;
+  color: #03af59;
 `;
 
 // const NavUserIcon = styled(BiUser)`

@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body{
-    background-color: #FFFFFF;
+    background-color: #282828;
   }
   a{
     color: inherit;
