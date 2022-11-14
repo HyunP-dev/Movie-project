@@ -2,14 +2,23 @@ import styled, { css } from 'styled-components';
 import { BiUser } from 'react-icons/bi';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const Navigation = () => {
   const location = useLocation();
-  const currentPath = location.pathname;
+  const [path] = useState(location.pathname);
+  const [navHidden, setNavHidden] = useState(false);
+
+  useEffect(() => {
+    if (path === '/login' || path === '/signup') {
+      setNavHidden(true);
+    }
+  }, [path]);
+
   return (
     <NavWrapper>
       <h1>Logo</h1>
-      <NavSearchWrapper path={currentPath}>
+      <NavSearchWrapper hidden={navHidden}>
         <NavSearchIcon />
         <NavSearch />
       </NavSearchWrapper>
@@ -34,11 +43,10 @@ const NavWrapper = styled.div`
 
 const NavSearchWrapper = styled.div`
   ${props =>
-    props.path === '/login' ||
-    (props.path === '/signup' &&
-      css`
-        visibility: hidden;
-      `)}
+    props.hidden &&
+    css`
+      visibility: hidden;
+    `}
   position: relative;
   display: flex;
   align-items: center;

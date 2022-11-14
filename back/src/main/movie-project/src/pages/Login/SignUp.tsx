@@ -44,15 +44,15 @@ const SignUp = () => {
           name="id"
           onChange={handleInputId}
         />
-        <LoginLabel>Nickname</LoginLabel>
+        <LoginLabel>닉네임</LoginLabel>
         <LoginInput placeholder="Nickname" name="id" onChange={handleInputId} />
-        <LoginLabel>Password</LoginLabel>
+        <LoginLabel>비밀번호</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
           onChange={handleInputPw}
         />
-        <LoginLabel>Confirm Password</LoginLabel>
+        <LoginLabel>비밀번호 확인</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
@@ -67,7 +67,7 @@ const SignUp = () => {
           </div>
           <div>
             <LoginLabel>생년월일</LoginLabel>
-            <LoginInput type="date" value="2000-01-01" max="2022-01-01" />
+            <LoginInput type="date" max="2022-01-01" />
           </div>
         </UserInfoBox>
         <LoginBtn disabled={!isValid}>계정 만들기</LoginBtn>
