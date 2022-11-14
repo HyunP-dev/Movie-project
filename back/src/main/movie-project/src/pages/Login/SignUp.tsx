@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
-const Login = () => {
+const SignUp = () => {
   const [isValid, setIsValid] = useState(false);
+  const [confirmPw, setConfirmPw] = useState('');
   const [userInfo, setUserInfo] = useState({
     id: '',
     pw: '',
@@ -23,13 +23,17 @@ const Login = () => {
     });
   };
 
+  const hadleConfirmPw = e => {
+    setConfirmPw(e.target.value);
+  };
+
   useEffect(() => {
-    if (userInfo.id && userInfo.pw) {
+    if (userInfo.id && userInfo.pw && userInfo.pw === confirmPw) {
       setIsValid(true);
     } else {
       setIsValid(false);
     }
-  }, [userInfo]);
+  }, [userInfo, confirmPw]);
 
   return (
     <LonginWrapper>
@@ -40,32 +44,46 @@ const Login = () => {
           name="id"
           onChange={handleInputId}
         />
-        <LoginLabel>Password</LoginLabel>
+        <LoginLabel>닉네임</LoginLabel>
+        <LoginInput placeholder="Nickname" name="id" onChange={handleInputId} />
+        <LoginLabel>비밀번호</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
           onChange={handleInputPw}
         />
-        <LoginBtn disabled={!isValid}>Sign In</LoginBtn>
-        <UnderTextWrapper>
-          <UnderText>Forgot Password</UnderText>
-          <Link to="/signup">
-            <UnderText>Sign up</UnderText>
-          </Link>
-        </UnderTextWrapper>
+        <LoginLabel>비밀번호 확인</LoginLabel>
+        <LoginInput
+          type="password"
+          placeholder="● ● ● ● ●"
+          onChange={hadleConfirmPw}
+        />
+        <UserInfoBox>
+          <div>
+            <LoginLabel>성별</LoginLabel>
+            <SelectedBox>
+              <option value="man">남성</option>
+            </SelectedBox>
+          </div>
+          <div>
+            <LoginLabel>생년월일</LoginLabel>
+            <LoginInput type="date" max="2022-01-01" />
+          </div>
+        </UserInfoBox>
+        <LoginBtn disabled={!isValid}>계정 만들기</LoginBtn>
       </LoginContent>
     </LonginWrapper>
   );
 };
 
-export default Login;
+export default SignUp;
 
 const LonginWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 60vh;
   margin-top: auto;
 `;
 
@@ -88,7 +106,7 @@ const LoginInput = styled.input`
 
 const LoginLabel = styled.h3`
   font-size: 1rem;
-  color: #03af59;
+  color: white;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 `;
@@ -104,7 +122,7 @@ const LoginBtn = styled.button`
   border-radius: 0.5rem;
   font-size: 1.2rem;
   color: white;
-  background-color: #667080;
+  background-color: #03af59;
   cursor: pointer;
 
   :disabled {
@@ -113,20 +131,32 @@ const LoginBtn = styled.button`
   }
 `;
 
-const UnderTextWrapper = styled.div`
+const UserInfoBox = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
-  height: 20%;
-  margin-top: 1rem;
+  div {
+    width: 100%;
+    height: 8em;
+    /* padding: 10px; */
+  }
+
+  input {
+    width: 100%;
+    height: 3rem;
+    margin-left: 10px;
+    color-scheme: dark;
+  }
 `;
 
-const UnderText = styled.p`
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #667080;
-  text-decoration: underline;
-  cursor: pointer;
+const SelectedBox = styled.select`
+  width: 100%;
+  height: 3rem;
+  padding-left: 1rem;
+  margin-right: 10px;
+  color: white;
+  border: 1px solid #03af59;
+  background-color: transparent;
+  border-radius: 0.5rem;
 `;
