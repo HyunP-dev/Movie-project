@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class BoxInfoDTO {
+@NoArgsConstructor
+public class BoxStillImageDTO {
 
-        private String title;
-        private String imageLink;
-        private String rating;
+     private String stileImage;
 }

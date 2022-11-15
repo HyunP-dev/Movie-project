@@ -9,6 +9,11 @@ spring:
       ddl-auto: update
     show-sql: true
 
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        format_sql: true
+
 KMDB:
   key: 4U6V83F44L7Y8VNLF42B
 
