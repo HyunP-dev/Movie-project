@@ -52,11 +52,7 @@ const Main = () => {
       <MainWrapper>
         <MainTopText>이번주 Best 영화</MainTopText>
         <MovieListWrapper>
-          <ThreeCarousel
-            slides={threeCarousel}
-            autoplay={true}
-            interval={5000}
-          />
+          <ThreeCarousel slides={threeCarousel} autoplay={false} />
         </MovieListWrapper>
       </MainWrapper>
       <QuizWrapper>
