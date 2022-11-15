@@ -1,10 +1,11 @@
 import styled, { css } from 'styled-components';
 import { BiUser } from 'react-icons/bi';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const Navigation = () => {
+  const accessToken = localStorage.getItem('AccessToken');
   const location = useLocation();
   const [path] = useState(location.pathname);
   const [navHidden, setNavHidden] = useState(false);
@@ -23,6 +24,13 @@ const Navigation = () => {
         <NavSearch />
       </NavSearchWrapper>
       <NavUserIcon />
+      {accessToken ? (
+        <p onClick={() => localStorage.removeItem('AccessToken')}>Loout</p>
+      ) : (
+        <Link to="/login">
+          <p style={{ color: 'white' }}>Login</p>
+        </Link>
+      )}
     </NavWrapper>
   );
 };
