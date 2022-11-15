@@ -23,7 +23,7 @@ public class ScrapperService {
         KobisScrapper kobisScrapper =
                 new KobisScrapper(LocalDate.now().minusDays(7L), LocalDate.now().minusDays(2L));
         for(BoxOfficeData boxOfficeData : kobisScrapper.getBoxOfficesByDate(LocalDate.now().minusDays(2L))){
-            String poster = Arrays.stream(kobisScrapper.getImageUrlsByCode(boxOfficeData.getCode(), KobisScrapper.ImageType.POSTER,true)).findFirst().orElse(" 찾지못한이미지");
+            String poster = KobisScrapper.getMainPosterByCode(boxOfficeData.getCode());
             String[] stillImage = kobisScrapper.getImageUrlsByCode(boxOfficeData.getCode(), KobisScrapper.ImageType.STILL_CUT,false);
             List<Actor> actorList = KobisScrapper.getActorList(boxOfficeData.getCode())
                     .stream().filter(actor -> actor.getType().equals("주연")).collect(Collectors.toList());
