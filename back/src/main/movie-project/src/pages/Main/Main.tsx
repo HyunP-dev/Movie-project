@@ -6,10 +6,14 @@ import 'react-round-carousel/src/index.css';
 import { Carousel as ThreeCarousel } from '3d-react-carousal';
 
 interface MovieData {
-  imageLink: string;
+  postLink: string;
   title: string;
   rating: string;
 }
+
+type postData = {
+  postLink: string;
+};
 
 const Main = () => {
   const [movie, setMovie] = useState([]);
@@ -17,25 +21,26 @@ const Main = () => {
   useEffect(() => {
     fetch('/mvi/box')
       .then(res => res.json())
-      .then(data => setMovie(data));
+      .then(data => {
+        setMovie(data);
+        console.log(movie);
+      });
   }, []);
 
-  const threeCarousel = movie?.map((props, index) => (
-    <img src={props.imageLink} key={index} />
+  const threeCarousel = movie?.map((props: postData, index) => (
+    <img src={props.postLink} key={index} />
   ));
   const movieTest: CarouselItem[] = movie?.map(
     (props: MovieData, index: number) => ({
       alt: 'movie poster',
-      image: props.imageLink,
+      image: props.postLink,
       content: (
         <Link
           key={index}
           to={'/detail'}
-          state={{ image: props?.imageLink, title: props?.title }}
+          state={{ image: props?.postLink, title: props?.title }}
         >
-          <MovieTitle>
-            {props.title.substr(3, props.title.length - 7)}
-          </MovieTitle>
+          <MovieTitle>{props.title}</MovieTitle>
           <MovieTitle>{props.rating}</MovieTitle>
         </Link>
       ),
@@ -57,14 +62,14 @@ const Main = () => {
       <QuizWrapper>
         <MainTopText>요즘 인기있는 영화 퀴즈</MainTopText>
         <QuizImgWrapper>
-          {movie.map((props, idx) => (
-            <img src={props.imageLink} key={idx} />
+          {movie.slice(0, 6).map((props: postData, idx) => (
+            <img src={props.postLink} key={idx} />
           ))}
         </QuizImgWrapper>
       </QuizWrapper>
       <CarouselWrapper>
         <MainTopText>이번주 상영하는 영화</MainTopText>
-        <Carousel items={movieTest} itemWidth={600} />
+        <Carousel items={movieTest} itemWidth={500} />
       </CarouselWrapper>
     </>
   );
