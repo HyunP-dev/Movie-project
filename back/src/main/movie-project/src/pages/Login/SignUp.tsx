@@ -1,30 +1,46 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface UserInfo {
+  id: string;
+  pw: string;
+  nickName: string;
+  gender: string;
+  birth: string;
+}
 
 const SignUp = () => {
   const [isValid, setIsValid] = useState(false);
   const [confirmPw, setConfirmPw] = useState('');
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '',
     pw: '',
+    nickName: '',
+    gender: '',
+    birth: '',
   });
 
-  const handleInputId = e => {
-    setUserInfo({
-      ...userInfo,
-      id: e.target.value,
+  const handleInput = e => {
+    const { name, value } = e.target;
+    setUserInfo(prev => {
+      const currentUserInfo = { ...prev };
+      currentUserInfo[name] = value;
+      return currentUserInfo;
     });
-  };
-
-  const handleInputPw = e => {
-    setUserInfo({
-      ...userInfo,
-      pw: e.target.value,
-    });
+    console.log(userInfo);
   };
 
   const hadleConfirmPw = e => {
     setConfirmPw(e.target.value);
+  };
+
+  const onClickSignUp = () => {
+    // axios
+    //   .post('', userInfo)
+    //   .then(res => console.log(res))
+    //   .catch(err => console.log(err));
+    console.log(userInfo);
   };
 
   useEffect(() => {
@@ -42,15 +58,20 @@ const SignUp = () => {
         <LoginInput
           placeholder="email@example.com"
           name="id"
-          onChange={handleInputId}
+          onChange={handleInput}
         />
         <LoginLabel>닉네임</LoginLabel>
-        <LoginInput placeholder="Nickname" name="id" onChange={handleInputId} />
+        <LoginInput
+          placeholder="Nickname"
+          name="nickName"
+          onChange={handleInput}
+        />
         <LoginLabel>비밀번호</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
-          onChange={handleInputPw}
+          onChange={handleInput}
+          name="pw"
         />
         <LoginLabel>비밀번호 확인</LoginLabel>
         <LoginInput
@@ -61,16 +82,25 @@ const SignUp = () => {
         <UserInfoBox>
           <div>
             <LoginLabel>성별</LoginLabel>
-            <SelectedBox>
+            <SelectedBox onChange={handleInput} name="gender">
+              <option value="default">-- 선택 하세요 --</option>
               <option value="man">남성</option>
+              <option value="woman">여성</option>
             </SelectedBox>
           </div>
           <div>
             <LoginLabel>생년월일</LoginLabel>
-            <LoginInput type="date" max="2022-01-01" />
+            <LoginInput
+              type="date"
+              max="2022-01-01"
+              onChange={handleInput}
+              name="birth"
+            />
           </div>
         </UserInfoBox>
-        <LoginBtn disabled={!isValid}>계정 만들기</LoginBtn>
+        <LoginBtn disabled={!isValid} onClick={onClickSignUp}>
+          계정 만들기
+        </LoginBtn>
       </LoginContent>
     </LonginWrapper>
   );

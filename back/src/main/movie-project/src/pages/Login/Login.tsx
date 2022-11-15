@@ -1,33 +1,42 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+// import {datetime, timedelta} from datetime;
 
 const Login = () => {
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    id: '',
-    pw: '',
+    email: '',
+    password: '',
   });
+  const navigation = useNavigate();
 
-  const handleInputId = e => {
-    setUserInfo({
-      ...userInfo,
-      id: e.target.value,
+  const handleInput = e => {
+    const { name, value } = e.target;
+    setUserInfo(prev => {
+      const currentUserInfo = { ...prev };
+      currentUserInfo[name] = value;
+      return currentUserInfo;
     });
   };
 
-  const handleInputPw = e => {
-    setUserInfo({
-      ...userInfo,
-      pw: e.target.value,
-    });
+  const onClickLogin = () => {
+    axios
+      .post('/generateToken', userInfo)
+      .then(res => {
+        console.log(res);
+        localStorage.setItem('AccessToken', res.data.accessToken);
+        navigation('/');
+      })
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {
-    if (userInfo.id && userInfo.pw) {
-      setIsValid(true);
-    } else {
+    if (userInfo.email && userInfo.password) {
       setIsValid(false);
+    } else {
+      setIsValid(true);
     }
   }, [userInfo]);
 
@@ -37,16 +46,19 @@ const Login = () => {
         <LoginLabel>Email</LoginLabel>
         <LoginInput
           placeholder="email@example.com"
-          name="id"
-          onChange={handleInputId}
+          name="email"
+          onChange={handleInput}
         />
         <LoginLabel>Password</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
-          onChange={handleInputPw}
+          name="password"
+          onChange={handleInput}
         />
-        <LoginBtn disabled={!isValid}>Sign In</LoginBtn>
+        <LoginBtn disabled={isValid} onClick={onClickLogin}>
+          Sign In
+        </LoginBtn>
         <UnderTextWrapper>
           <UnderText>Forgot Password</UnderText>
           <Link to="/signup">
