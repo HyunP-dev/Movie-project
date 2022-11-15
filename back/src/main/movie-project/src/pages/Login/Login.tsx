@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {datetime, timedelta} from datetime;
+// import {datetime, timedelta} from datetime;
 
 const Login = () => {
   const [isValid, setIsValid] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    id: '',
-    pw: '',
+    email: '',
+    password: '',
   });
   const navigation = useNavigate();
 
@@ -22,14 +22,18 @@ const Login = () => {
   };
 
   const onClickLogin = () => {
-    axios.post('/generateToken', userInfo).then(res => {
-      localStorage.setItem('AccessToken', res.accessToken);
-      navigation('/');
-    }).catch(err => console.log(err));
+    axios
+      .post('/generateToken', userInfo)
+      .then(res => {
+        console.log(res);
+        localStorage.setItem('AccessToken', res.data.accessToken);
+        navigation('/');
+      })
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {
-    if (userInfo.id && userInfo.pw) {
+    if (userInfo.email && userInfo.password) {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -42,14 +46,14 @@ const Login = () => {
         <LoginLabel>Email</LoginLabel>
         <LoginInput
           placeholder="email@example.com"
-          name="id"
+          name="email"
           onChange={handleInput}
         />
         <LoginLabel>Password</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
-          name="pw"
+          name="password"
           onChange={handleInput}
         />
         <LoginBtn disabled={isValid} onClick={onClickLogin}>
