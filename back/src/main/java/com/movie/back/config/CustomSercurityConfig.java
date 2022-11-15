@@ -4,6 +4,7 @@ package com.movie.back.config;
 import com.movie.back.filter.APILoginFilter;
 import com.movie.back.filter.RefreshTokenFilter;
 import com.movie.back.filter.TokenCheckFilter;
+import com.movie.back.handler.APILoginFailureHandler;
 import com.movie.back.handler.APILoginSuccessHandler;
 import com.movie.back.security.CustomUserDetailService;
 import com.movie.back.util.JWTUtil;
@@ -63,7 +64,8 @@ public class CustomSercurityConfig {
         //Handler 세팅
         apiLoginFilter.setAuthenticationSuccessHandler(successHandler); //인증 성공하면 redirect 가 아닌 이 핸들러로 들어감
         //커스텀 필터 위치변경
-
+        apiLoginFilter.setAuthenticationFailureHandler(new APILoginFailureHandler());
+        //apiLoginFilter.setAuthenticationFailureHandler();
         http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);   //인증필터
         http.addFilterBefore(tokenCheckFilter(jwtUtil),UsernamePasswordAuthenticationFilter.class); //모든 요청 필터
         //UsernamePassword를 처리하는 필터인 UsernamePasswrodAuthenticationFIlter 전에 커스텀필터를 둔다
