@@ -3,11 +3,11 @@ import reset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  *{
+  * {
     box-sizing: border-box;
   }
   body{
-    background-color: #FFFFFF;
+    background-color: #282828;
   }
   a{
     color: inherit;

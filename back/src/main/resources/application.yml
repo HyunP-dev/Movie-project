@@ -41,3 +41,7 @@ movie:
 
 file:
   path: D:\\fileupload
+
+jwt:
+  secret:
+    testKey
