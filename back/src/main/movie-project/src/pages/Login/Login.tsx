@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import {datetime, timedelta} from datetime;
+import { setRefreshToken } from '../../storage/Cookie';
+import { SET_TOKEN } from '../../store/Auth';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const [isValid, setIsValid] = useState(true);
@@ -10,7 +12,8 @@ const Login = () => {
     email: '',
     password: '',
   });
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInput = e => {
     const { name, value } = e.target;
@@ -25,11 +28,16 @@ const Login = () => {
     axios
       .post('/generateToken', userInfo)
       .then(res => {
-        console.log(res);
-        localStorage.setItem('AccessToken', res.data.accessToken);
-        navigation('/');
+        if (res) {
+          setRefreshToken(res.data.refreshToken);
+          dispatch(SET_TOKEN(res.data.accessToken));
+          navigate('/');
+        }
       })
-      .catch(err => alert('아이디 비밀번호를 확인해주세요!'));
+      .catch(err => {
+        console.log(err);
+        alert('아이디 비밀번호를 확인해주세요!');
+      });
   };
 
   useEffect(() => {

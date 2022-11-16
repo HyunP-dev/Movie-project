@@ -5,7 +5,6 @@ import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const Navigation = () => {
-  const accessToken = localStorage.getItem('AccessToken');
   const location = useLocation();
   const [path] = useState(location.pathname);
   const [navHidden, setNavHidden] = useState(false);
@@ -14,7 +13,7 @@ const Navigation = () => {
     if (path === '/login' || path === '/signup') {
       setNavHidden(true);
     }
-  }, [path]);
+  }, [location]);
 
   return (
     <NavWrapper>
@@ -24,13 +23,6 @@ const Navigation = () => {
         <NavSearch />
       </NavSearchWrapper>
       <NavUserIcon />
-      {accessToken ? (
-        <p onClick={() => localStorage.removeItem('AccessToken')}>Loout</p>
-      ) : (
-        <Link to="/login">
-          <p style={{ color: 'white' }}>Login</p>
-        </Link>
-      )}
     </NavWrapper>
   );
 };
