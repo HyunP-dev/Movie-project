@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { BiUser } from 'react-icons/bi';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const Navigation = () => {
@@ -13,7 +13,7 @@ const Navigation = () => {
     if (path === '/login' || path === '/signup') {
       setNavHidden(true);
     }
-  }, [path]);
+  }, [location]);
 
   return (
     <NavWrapper>

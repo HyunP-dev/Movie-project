@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Carousel, CarouselItem } from 'react-round-carousel';
 import 'react-round-carousel/src/index.css';
 import { Carousel as ThreeCarousel } from '3d-react-carousal';
+import axios from 'axios';
 
 interface MovieData {
   postLink: string;
@@ -13,22 +14,31 @@ interface MovieData {
 
 type postData = {
   postLink: string;
+  stillImage: string[];
 };
 
 const Main = () => {
   const [movie, setMovie] = useState([]);
 
   useEffect(() => {
-    fetch('/mvi/box')
-      .then(res => res.json())
-      .then(data => {
-        setMovie(data);
-        console.log(movie);
-      });
+    axios
+      .get('/mvi/box')
+      .then(res => {
+        setMovie(res.data);
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
   }, []);
 
   const threeCarousel = movie?.map((props: postData, index) => (
-    <img src={props.postLink} key={index} />
+    <MainPoster>
+      <img src={props.postLink} key={index} />
+      <PosterStillCut style={{ border: '1px solid black !important' }}>
+        {props?.stillImage.slice(0, 9).map((props, index) => (
+          <img src={props} alt={props} />
+        ))}
+      </PosterStillCut>
+    </MainPoster>
   ));
   const movieTest: CarouselItem[] = movie?.map(
     (props: MovieData, index: number) => ({
@@ -95,10 +105,10 @@ const MovieListWrapper = styled.div`
     box-shadow: none !important;
   }
 
-  div div div div div div {
+  /* div div div div div div {
     border: 1px solid white !important;
     border-radius: 50%;
-  }
+  } */
 
   img {
     width: 25rem;
@@ -135,5 +145,25 @@ const QuizImgWrapper = styled.div`
     width: 10%;
     height: 100%;
     padding-right: 0.5rem;
+  }
+`;
+
+const MainPoster = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+const PosterStillCut = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 20rem;
+  height: 30rem;
+  background-color: #fefefe;
+  img {
+    flex-grow: 1;
+    width: 30%;
+    height: 35%;
   }
 `;

@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface UserInfo {
-  id: string;
-  pw: string;
+  email: string;
+  password: string;
   nickName: string;
   gender: string;
   birth: string;
@@ -14,8 +14,8 @@ const SignUp = () => {
   const [isValid, setIsValid] = useState(false);
   const [confirmPw, setConfirmPw] = useState('');
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    id: '',
-    pw: '',
+    email: '',
+    password: '',
     nickName: '',
     gender: '',
     birth: '',
@@ -40,11 +40,15 @@ const SignUp = () => {
     //   .post('', userInfo)
     //   .then(res => console.log(res))
     //   .catch(err => console.log(err));
-    console.log(userInfo);
+    // console.log(userInfo);
   };
 
   useEffect(() => {
-    if (userInfo.id && userInfo.pw && userInfo.pw === confirmPw) {
+    if (
+      userInfo.email &&
+      userInfo.password &&
+      userInfo.password === confirmPw
+    ) {
       setIsValid(true);
     } else {
       setIsValid(false);
@@ -71,7 +75,7 @@ const SignUp = () => {
           type="password"
           placeholder="● ● ● ● ●"
           onChange={handleInput}
-          name="pw"
+          name="password"
         />
         <LoginLabel>비밀번호 확인</LoginLabel>
         <LoginInput
