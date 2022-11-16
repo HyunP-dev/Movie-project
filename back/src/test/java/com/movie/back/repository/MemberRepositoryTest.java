@@ -18,6 +18,12 @@ class MemberRepositoryTest {
     PasswordEncoder passwordEncoder;
     @Test
     void test(){
-        memberRepository.save(Member.builder().email("user").password(passwordEncoder.encode("1111")).build());
+        memberRepository.save(Member.builder()
+                .email("user")
+                .password(passwordEncoder.encode("1111"))
+                        .birth("2020")
+                        .gender("남")
+                        .nickName("닉네읨")
+                .build());
     }
 }

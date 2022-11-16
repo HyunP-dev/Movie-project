@@ -1,6 +1,7 @@
 package com.movie.back.handler;
 
 import com.google.gson.Gson;
+import com.movie.back.dto.MemberDTO;
 import com.movie.back.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,11 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("authentication Handler   {}",authentication);
         log.info("authentication Handler   {}",authentication.getName());    //username임
 
-        Map<String,Object> claim = Map.of("mid",authentication.getName());
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        log.info("MemberDTO ======================= 여기{}",memberDTO);
+        //TODO: 여기 닉네임부분수정예정
+        Map<String,Object> claim = Map.of("email",authentication.getName(),"nick",memberDTO.getNickName());
+        authentication.getPrincipal();
         //AccessToken 유효기간 1일
         String accessToken = jwtUtil.generateToken(claim,1);
         //RefreshToken 유효기간 30일

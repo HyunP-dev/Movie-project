@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.movie.back.security.exception.RefreshTokenException;
 import com.movie.back.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -53,7 +56,40 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             refreshTokenException.sendResponseError(response);
             return;
         }
+
+        Map<String,Object> refreshClaims = null;
+
+        try{
+            refreshClaims = checkRefreshToken(refreshToken);    //refershToken을 확인한다.
+            log.info(String.valueOf(refreshClaims));
+        }catch (RefreshTokenException refreshTokenException){
+            refreshTokenException.sendResponseError(response);
+            return;
+        }
+
+        //RefreshToken 의 유효시간이 얼마 남지 않은경우
+        Integer exp = (Integer)refreshClaims.get("exp");    //이거 토큰 만료시간 exp
+
+        Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
+
+        Date current = new Date(System.currentTimeMillis());
+
+        //만료 시간과 현재 시간의 간 격을 계산한다.
+        //만일 3일 미만인 경우에는 RefreshToken도 다시 생성한다.
+        long gapTime = (expTime.getTime() - current.getTime());
+
+        log.info("-----------------------------------------");
+        log.info("current: " + current);
+        log.info("expTime: " + expTime);
+        log.info("gap: " + gapTime );
+
+        String email = (String)refreshClaims.get("email");  //todo: 여기 닉네임도
+
+        //이 상태까지 오면 무조건 AccessToken은 새로 생성하낟.
+        String accessTokenValue = jwtUtil.generateToken(Map.of("email",email),1);
+
     }
+
 
     private void checkAccessToken(String accessToken) throws RefreshTokenException{
         try{
@@ -76,8 +112,13 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             return values;
         }catch (ExpiredJwtException e){
             throw new RefreshTokenException(RefreshTokenException.ErrorCase.OLD_REFRESH);
+        }catch(MalformedJwtException expiredJwtException){
+            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
+        }catch (Exception e){
+            new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
         }
         //이어서 적어야한다
+        return null;
     }
 
 
