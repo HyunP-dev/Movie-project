@@ -1,33 +1,50 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { setRefreshToken } from '../../storage/Cookie';
+import { SET_TOKEN } from '../../store/Auth';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    id: '',
-    pw: '',
+    email: '',
+    password: '',
   });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleInputId = e => {
-    setUserInfo({
-      ...userInfo,
-      id: e.target.value,
+  const handleInput = e => {
+    const { name, value } = e.target;
+    setUserInfo(prev => {
+      const currentUserInfo = { ...prev };
+      currentUserInfo[name] = value;
+      return currentUserInfo;
     });
   };
 
-  const handleInputPw = e => {
-    setUserInfo({
-      ...userInfo,
-      pw: e.target.value,
-    });
+  const onClickLogin = () => {
+    axios
+      .post('/generateToken', userInfo)
+      .then(res => {
+        if (res) {
+          setRefreshToken(res.data.refreshToken);
+          dispatch(SET_TOKEN(res.data.accessToken));
+          navigate('/');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alert('아이디 비밀번호를 확인해주세요!');
+      });
   };
 
   useEffect(() => {
-    if (userInfo.id && userInfo.pw) {
-      setIsValid(true);
-    } else {
+    if (userInfo.email && userInfo.password) {
       setIsValid(false);
+    } else {
+      setIsValid(true);
     }
   }, [userInfo]);
 
@@ -37,16 +54,19 @@ const Login = () => {
         <LoginLabel>Email</LoginLabel>
         <LoginInput
           placeholder="email@example.com"
-          name="id"
-          onChange={handleInputId}
+          name="email"
+          onChange={handleInput}
         />
         <LoginLabel>Password</LoginLabel>
         <LoginInput
           type="password"
           placeholder="● ● ● ● ●"
-          onChange={handleInputPw}
+          name="password"
+          onChange={handleInput}
         />
-        <LoginBtn disabled={!isValid}>Sign In</LoginBtn>
+        <LoginBtn disabled={isValid} onClick={onClickLogin}>
+          Sign In
+        </LoginBtn>
         <UnderTextWrapper>
           <UnderText>Forgot Password</UnderText>
           <Link to="/signup">

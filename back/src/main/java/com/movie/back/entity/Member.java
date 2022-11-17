@@ -20,4 +20,10 @@ public class Member {
         private String email;
 
         private String password;
+
+        private String birth;
+
+        private String gender;
+
+        private String nickName;
 }

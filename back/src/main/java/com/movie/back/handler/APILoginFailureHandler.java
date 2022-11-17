@@ -22,14 +22,14 @@ public class APILoginFailureHandler implements AuthenticationFailureHandler {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        String errorMessage = "로그인 실패";
-        if (exception instanceof BadCredentialsException) {
-            errorMessage = "Invalid Username / Password";
-        } else if (exception instanceof DisabledException) {
-            errorMessage = "Locked";
-        } else if (exception instanceof CredentialsExpiredException) {
-            errorMessage = "Expired password";
-        }
+//        String errorMessage = "로그인 실패";
+//        if (exception instanceof BadCredentialsException) {
+//            errorMessage = "Invalid Username / Password";
+//        } else if (exception instanceof DisabledException) {
+//            errorMessage = "Locked";
+//        } else if (exception instanceof CredentialsExpiredException) {
+//            errorMessage = "Expired password";
+//        }
 
 
 

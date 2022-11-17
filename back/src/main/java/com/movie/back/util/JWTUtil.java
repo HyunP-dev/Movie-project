@@ -23,23 +23,23 @@ public class JWTUtil {
 
         //Header 부분
         Map<String,Object> headers = new HashMap<>();
-        headers.put("typ","JWT");
-        headers.put("alg","HS256");
+        headers.put("typ","JWT");   //Token Type
+        headers.put("alg","HS256");     //해싱 알고리즘
 
 
         //PayLoad
-        Map<String,Object> payloads = new HashMap<>();
+        Map<String,Object> payloads = new HashMap<>();  //실질적인  내용
         payloads.putAll(valueMap);
 
         int time = (60*24)*days;
 
         String jwtStr = Jwts.builder()
-                .setHeader(headers)
-                .setClaims(payloads)
-                .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(time).toInstant()))    //분단위로처리
-                .signWith(SignatureAlgorithm.HS256, key.getBytes())
-                .compact();
+                .setHeader(headers) //header 값
+                .setClaims(payloads)    //payloads 내용 바디
+                .setIssuedAt(Date.from(ZonedDateTime.now().toInstant())) //언제부터
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(time).toInstant()))    //만료분단위로처리
+                .signWith(SignatureAlgorithm.HS256, key.getBytes()) //알고리즘과 키값설정필요
+                .compact(); //base64 로 처리가 필요하다.
 
 
         return jwtStr;
