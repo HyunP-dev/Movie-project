@@ -18,9 +18,11 @@ public class MemberDTO extends User {
     private String gender;
 
     private String nickName;
-    public MemberDTO(String username, String password, Collection<GrantedAuthority> authorities){
+    public MemberDTO(String username, String password, String nickName,Collection<GrantedAuthority> authorities){
         super(username,password,authorities);
         this.email = username;
+
         this.password = password;
+        this.nickName = nickName;
     }
 }

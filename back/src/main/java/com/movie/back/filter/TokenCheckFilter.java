@@ -27,10 +27,10 @@ public class TokenCheckFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        if(!path.startsWith("/api/")){  //요청경로가 api로 시작하지 않으면 그냥 지나가게 함
-            filterChain.doFilter(request,response); //필터를 따라 다음 필터로
-            return;
-        }
+//        if(!path.startsWith("/api/")){  //요청경로가 api로 시작하지 않으면 그냥 지나가게 함
+//            filterChain.doFilter(request,response); //필터를 따라 다음 필터로
+//            return;
+//        }
 
         log.info("Token Check Filter.....................");
         log.info("JWTUtil: "+jwtUtil);
@@ -46,7 +46,7 @@ public class TokenCheckFilter  extends OncePerRequestFilter {
 
     private Map<String,Object> validateAccessToken(HttpServletRequest request) throws AccessTokenException{
         String headerStr = request.getHeader("Authorization");
-
+        System.out.println(headerStr);
         if(headerStr == null || headerStr.length()<8){
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);
         }
@@ -70,6 +70,7 @@ public class TokenCheckFilter  extends OncePerRequestFilter {
             log.info("SignatureException---------------------------------");
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADSIGN);
         }catch (ExpiredJwtException e){
+            //AccessToken 만료되면 여기로감
             log.error("ExpiredJwtExcpetion----------------------------------");
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.EXPIRED);
         }

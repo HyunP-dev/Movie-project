@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -33,6 +34,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String path = request.getRequestURI();
 
+        log.info("refreshPath=============================={}",refreshPath);
         if(!path.equals(refreshPath)){
             log.info("Skip refresh token filter......");
             filterChain.doFilter(request,response);
@@ -87,7 +89,14 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
         //이 상태까지 오면 무조건 AccessToken은 새로 생성하낟.
         String accessTokenValue = jwtUtil.generateToken(Map.of("email",email),1);
+        String refreshTokenValue = tokens.get("refreshToken");
 
+        //RefreshToken이 3일도 안 남으면
+        if(gapTime < (1000 * 60 * 60 * 24 * 3)){
+            log.info("new RefreshToken required...");
+            refreshTokenValue = jwtUtil.generateToken(Map.of("email",email),30);
+        }
+        sendTokens(accessTokenValue,refreshTokenValue,response);
     }
 
 
@@ -127,6 +136,22 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         try(Reader reader = new InputStreamReader(request.getInputStream())){
             Gson gson = new Gson();
             return gson.fromJson(reader,Map.class); //request로 들어온 json데이터를 Map으로 바꾼다.
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendTokens(String accesTokenValue,String refreshTokenValue, HttpServletResponse response){
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        Gson gson = new Gson();
+
+        String jsonStr = gson.toJson(
+                Map.of("accessToken",accesTokenValue,"refreshToken",refreshTokenValue));
+
+        try{
+            response.getWriter().println(jsonStr);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
