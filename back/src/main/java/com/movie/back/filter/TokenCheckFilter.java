@@ -31,7 +31,10 @@ public class TokenCheckFilter  extends OncePerRequestFilter {
 //            filterChain.doFilter(request,response); //필터를 따라 다음 필터로
 //            return;
 //        }
-
+        if(path.startsWith("/register")){
+            filterChain.doFilter(request,response);
+            return;
+        }
         log.info("Token Check Filter.....................");
         log.info("JWTUtil: "+jwtUtil);
 
