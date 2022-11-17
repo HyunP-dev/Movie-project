@@ -14,19 +14,11 @@ public class MemberDTO extends User {
 
     private String password;
 
-    private String birth;
-
-    private String gender;
-
-    private String nickName;
 
 
-    public MemberDTO(String username, String password, String nickName,String birth,String gender,Collection<GrantedAuthority> authorities){
+    public MemberDTO(String username, String password,Collection<GrantedAuthority> authorities){
         super(username,password,authorities);
         this.email = username;
         this.password = password;
-        this.nickName = nickName;
-        this.birth = birth;
-        this.gender =gender;
     }
 }
