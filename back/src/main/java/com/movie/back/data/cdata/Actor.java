@@ -25,14 +25,8 @@ public class Actor {
             switch (Integer.parseInt(actorGb)) {
                 case 1:
                     return "주연";
-                case 2:
-                    return "조연";
-                case 3:
-                    return "특별출연";
-                case 5:
-                    return "단역";
                 default:
-                    return null;
+                    return "없음";
             }
         }
 }
