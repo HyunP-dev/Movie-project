@@ -21,9 +21,4 @@ public class Member {
 
         private String password;
 
-        private String birth;
-
-        private String gender;
-
-        private String nickName;
 }
