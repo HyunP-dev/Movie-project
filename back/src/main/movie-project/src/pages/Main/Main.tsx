@@ -4,6 +4,13 @@ import { useEffect, useState } from 'react';
 import { Carousel, CarouselItem } from 'react-round-carousel';
 import 'react-round-carousel/src/index.css';
 import { Carousel as ThreeCarousel } from '3d-react-carousal';
+import {
+  setRefreshToken,
+  getCookieToken,
+  getAccessToken,
+  setAccessToken,
+} from '../../storage/Cookie';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 interface MovieData {
@@ -19,15 +26,34 @@ type postData = {
 
 const Main = () => {
   const [movie, setMovie] = useState([]);
+  const accessToken = getAccessToken();
+  const refreshToken = getCookieToken();
 
   useEffect(() => {
     axios
-      .get('/mvi/box')
+      .get('/mvi/box', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then(res => {
         setMovie(res.data);
         console.log(res.data);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        if (err.response.data.msg === 'Expired Token') {
+          axios
+            .post('/refreshToken', {
+              accessToken: accessToken,
+              refreshToken: refreshToken,
+            })
+            .then(res => {
+              setRefreshToken(res.data.refreshToken);
+              setAccessToken(res.data.accessToken);
+              document.location.reload();
+            });
+        }
+      });
   }, []);
 
   const threeCarousel = movie?.map((props: postData, index) => (
@@ -35,7 +61,7 @@ const Main = () => {
       <img src={props.postLink} key={index} />
       <PosterStillCut style={{ border: '1px solid black !important' }}>
         {props?.stillImage.slice(0, 9).map((props, index) => (
-          <img src={props} alt={props} />
+          <img src={props} alt={props} key={index} />
         ))}
       </PosterStillCut>
     </MainPoster>

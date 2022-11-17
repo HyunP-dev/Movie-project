@@ -26,4 +26,11 @@ class MemberRepositoryTest {
                         .nickName("닉네읨")
                 .build());
     }
+    @Test
+    void t1est(){
+        memberRepository.save(Member.builder()
+                .email("user")
+                .password(passwordEncoder.encode("1111"))
+                .build());
+    }
 }

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 interface UserInfo {
   email: string;
