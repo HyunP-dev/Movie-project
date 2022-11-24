@@ -17,8 +17,8 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public void memberRegister(MemberDTO memberDTO){
-
-            memberRepository.save(Member.builder().build());
+    public MemberDTO memberRegister(MemberDTO memberDTO){
+            memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+            return MemberDTO.toDTO(memberRepository.save(MemberDTO.toEntity(memberDTO)));
     }
 }

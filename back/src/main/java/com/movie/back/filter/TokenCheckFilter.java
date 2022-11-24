@@ -31,7 +31,7 @@ public class TokenCheckFilter  extends OncePerRequestFilter {
 //            filterChain.doFilter(request,response); //필터를 따라 다음 필터로
 //            return;
 //        }
-        if(path.startsWith("/register")){
+        if(path.startsWith("/register") || path.startsWith("/mvi/")){
             filterChain.doFilter(request,response);
             return;
         }

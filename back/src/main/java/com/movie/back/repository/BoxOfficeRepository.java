@@ -13,4 +13,8 @@ public interface BoxOfficeRepository extends JpaRepository<BoxOffice,String> {
     //fetch join 두개 존나위험해서 그냥 BatchSize사용함
     public List<BoxOffice> getBoxOfficeList();
     //left 없으면 null
+
+    @Query("select distinct b from BoxOffice b left join fetch b.stillImage" +
+            " where b.title = :title")
+    public BoxOffice getMovieRead(String title);
 }
