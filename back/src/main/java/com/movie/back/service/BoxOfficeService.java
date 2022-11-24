@@ -90,11 +90,18 @@ public class BoxOfficeService {
 
     public BoxOfficeDTO getReadMovie(String title){
             BoxOffice boxOffice = boxOfficeRepository.getMovieRead(title);
+        List<String> resultStill = null;
+            List<String> still = boxOffice
+                    .getStillImage().stream().map(boxStillImage -> boxStillImage.getImageLink())
+                    .collect(Collectors.toList());
+            if(!still.isEmpty()){
+                resultStill = still.subList(0,10);
+            }
         return BoxOfficeDTO.builder()
                 .title(boxOffice.getTitle())
                 .date(boxOffice.getDate())
                 .synopsis(boxOffice.getSynopsis())
-                .stillImage(boxOffice.getStillImage().stream().map(boxStillImage -> boxStillImage.getImageLink()).collect(Collectors.toList()))
+                .stillImage(resultStill)
                 .postLink(boxOffice.getPosterLink())
                 .rank(boxOffice.getRanking())
                 .actorList(boxOffice.getActorList().stream().map(actorEntity -> ActorDTO.builder()
