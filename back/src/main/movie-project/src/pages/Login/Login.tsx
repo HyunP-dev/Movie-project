@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { setRefreshToken } from '../../storage/Cookie';
+import { setRefreshToken, setAccessToken } from '../../storage/Cookie';
 import { SET_TOKEN } from '../../store/Auth';
 import { useDispatch } from 'react-redux';
 
@@ -30,7 +30,7 @@ const Login = () => {
       .then(res => {
         if (res) {
           setRefreshToken(res.data.refreshToken);
-          dispatch(SET_TOKEN(res.data.accessToken));
+          setAccessToken(res.data.accessToken);
           navigate('/');
         }
       })

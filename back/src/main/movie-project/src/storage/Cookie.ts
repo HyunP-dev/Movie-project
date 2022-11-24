@@ -7,10 +7,21 @@ export const setRefreshToken = (refreshToken: string) => {
   const expireDate = today.setDate(today.getDate() + 30);
 
   return cookies.set('refreshToken', refreshToken, {
-    sameSite: 'strict',
-    path: '/',
     expires: new Date(expireDate),
   });
+};
+
+export const setAccessToken = (accessToken: string) => {
+  const today = new Date();
+  const expireDate = today.setDate(today.getDate() + 5);
+
+  return cookies.set('accessToken', accessToken, {
+    expires: new Date(expireDate),
+  });
+};
+
+export const getAccessToken = () => {
+  return cookies.get('accessToken');
 };
 
 export const getCookieToken = () => {

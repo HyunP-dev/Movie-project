@@ -1,15 +1,20 @@
 package com.movie.back.service;
 
 import com.movie.back.data.cdata.BoxOfficeData;
+import com.movie.back.data.cdata.MovieCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class KobisScrapperTest {
 
 
-
+    @Autowired
+    ScrapperService scrapperService;
     @Test
     @DisplayName("크롤링테스트")
     void test1() throws IOException, KobisScrapper.NotScrappedDateException {
@@ -76,5 +82,50 @@ class KobisScrapperTest {
             }
         }
 
+    }
+    @Test
+    @DisplayName("크롤링테스트3")
+    void test4() throws IOException {
+
+
+        IntStream.rangeClosed(1,34).forEach(value -> {
+         MovieCode[] movieCodes = new MovieCode[0];
+            try {
+                movieCodes = Optional.of(KobisScrapper.searchUserMovCdList(2021, 2022, value)).orElseThrow(NullPointerException::new);
+            } catch (NullPointerException nullPointerException) {
+                System.out.println("끝");
+            }
+            for (MovieCode movieCode : movieCodes) {
+                if (movieCode != null) {
+                    try {
+                        KobisScrapper.getActorList(movieCode.getCode()).forEach(System.out::println);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        System.out.println(KobisScrapper.getMainPosterByCode(movieCode.getCode()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        System.out.println(Optional.of(KobisScrapper.getSynopsisByCode(movieCode.getCode())).orElse("없음"));
+                    } catch (Exception e) {
+                        System.out.println("여기서 에러");
+                    }
+                    try {
+                        Arrays.stream(KobisScrapper.getImageUrlsByCode(movieCode.getCode(), KobisScrapper.ImageType.STILL_CUT, true)).forEach(System.out::println);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("반복문에 마지막 번호" + value);
+                }
+            }
+
+        });
+    }
+
+    @Test
+    void test5() throws KobisScrapper.NotScrappedDateException, IOException {
+        scrapperService.latestBoxOffice().forEach(System.out::println);
     }
 }
