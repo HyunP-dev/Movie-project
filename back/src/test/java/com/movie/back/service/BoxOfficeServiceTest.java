@@ -49,4 +49,9 @@ class BoxOfficeServiceTest {
         System.out.println(boxOfficeService.getReadMovie("동감"));
     }
 
+    @Test
+    void test6(){
+        System.out.println(boxOfficeRepository.getMovieRead("자백").getStillImage().size());
+    }
+
 }
