@@ -31,6 +31,11 @@ public class MainController {
             return ResponseEntity.ok(boxOfficeService.getBoxList());
     }
 
+    @GetMapping(value = "/read")
+    public ResponseEntity<BoxOfficeDTO> read(@RequestParam(required = true) String title){
+
+        return ResponseEntity.ok(boxOfficeService.getReadMovie(title));
+    }
 
 
     @PostMapping(value = "",consumes = MediaType.APPLICATION_JSON_VALUE)

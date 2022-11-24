@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.movie.back.data.cdata.Actor;
 import com.movie.back.data.cdata.BoxOfficeData;
+import com.movie.back.data.cdata.MovieCode;
 import net.bytebuddy.description.method.MethodDescription;
 import org.jsoup.Jsoup;
 
@@ -78,6 +79,42 @@ public class KobisScrapper {
      * @return 박스오피스 랭킹 및 코드를 담은 객체들의 배열을 반환
      * @throws NotScrappedDateException 입력된 날짜가 긁어오지 않은 날짜에 해당하는 경우 예외를 발생
      */
+    public static MovieCode[] searchUserMovCdList(int startYear, int endYear, int page) {
+        try {
+            String url = "https://www.kobis.or.kr/kobis/business/mast/mvie/searchUserMovCdList.do";
+            Document document = Jsoup.connect(url)
+                    .data("curPage", page + "")
+                    .data("searchType", "")
+                    .data("point", "")
+                    .data("orderBy", "")
+                    .data("auth", "")
+                    .data("ordering", "updDttmOrder")
+                    .data("searchOpen", "")
+                    .data("movieNm", "")
+                    .data("movieCd", "")
+                    .data("directorNm", "")
+                    .data("prdtStartYear", "")
+                    .data("prdtEndYear", "")
+                    .data("openStartDt", startYear + "")
+                    .data("openEndDt", endYear + "")
+                    .data("repNationCd", "")
+                    .data("showTypeStr", "")
+                    .post();
+            Elements rows = document.select(".tbl3 > tbody > tr");
+            return rows.stream()
+                    .filter(row -> row.select("td").size() == 8)
+                    .map(row -> {
+                        Elements tds = row.select("td");
+                        String title = tds.first().attr("title");
+                        int code = Integer.parseInt(tds.last().text());
+                        return new MovieCode(title, code);
+                    }).toArray(MovieCode[]::new);
+        } catch (IOException exception) {
+            return new MovieCode[0];
+        }
+    }
+
+
     public BoxOfficeData[] getBoxOfficesByDate(LocalDate date) throws NotScrappedDateException {
         if (!boxOfficeData.containsKey(date)) throw new NotScrappedDateException();
         return boxOfficeData.get(date);
@@ -131,7 +168,7 @@ public class KobisScrapper {
         Document document = loadPopup(code);
         Elements info2s = document.select(".info2");
         return info2s.stream()
-                .filter(info2 -> info2.selectFirst("strong").text().trim().equals("시놉시스"))
+                .filter(info2 -> Optional.of(info2.selectFirst("strong").text().trim().equals("시놉시스")).orElseThrow())
                 .map(info2 -> info2.selectFirst(".desc_info").text().trim())
                 .findFirst()
                 .get();

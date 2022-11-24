@@ -37,5 +37,16 @@ class BoxOfficeServiceTest {
         boxOfficeService.getBoxList().forEach(System.out::println);
     }
 
+    @Test
+    @Transactional
+    void test4(){
+        System.out.println(boxOfficeRepository.getMovieRead("동감"));
+    }
+
+    @Test
+    @Transactional
+    void test5(){
+        System.out.println(boxOfficeService.getReadMovie("동감"));
+    }
 
 }

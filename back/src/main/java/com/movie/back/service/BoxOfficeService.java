@@ -38,9 +38,9 @@ public class BoxOfficeService {
                     .date(boxOfficeDTO.getDate())
                     .posterLink(boxOfficeDTO.getPostLink())
                     .build();
-            boxOfficeRepository.save(boxOffice);
+            boxOfficeRepository.save(boxOffice);    //연관관계 없는 것들 먼저 저장한다.
 
-            boxOfficeDTO.getStillImage().forEach(image ->{
+            boxOfficeDTO.getStillImage().forEach(image ->{  //불러온 이미지들을 위에 저장한 정보에 연관관계로 저장
                 boxStillImageRepository.save(BoxStillImage.builder()
                         .boxOfficeId(boxOffice)
                         .imageLink(image)
@@ -86,6 +86,22 @@ public class BoxOfficeService {
             });
             return dtoList;
 
+    }
+
+    public BoxOfficeDTO getReadMovie(String title){
+            BoxOffice boxOffice = boxOfficeRepository.getMovieRead(title);
+        return BoxOfficeDTO.builder()
+                .title(boxOffice.getTitle())
+                .date(boxOffice.getDate())
+                .synopsis(boxOffice.getSynopsis())
+                .stillImage(boxOffice.getStillImage().stream().map(boxStillImage -> boxStillImage.getImageLink()).collect(Collectors.toList()))
+                .postLink(boxOffice.getPosterLink())
+                .rank(boxOffice.getRanking())
+                .actorList(boxOffice.getActorList().stream().map(actorEntity -> ActorDTO.builder()
+                        .actorName(actorEntity.getActorName())
+                        .actorRole(actorEntity.getActorRole())
+                        .build()).collect(Collectors.toList()))
+                .build();
     }
 
 
