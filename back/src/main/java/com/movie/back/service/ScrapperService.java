@@ -23,7 +23,7 @@ public class ScrapperService {
         KobisScrapper kobisScrapper =
                 new KobisScrapper(LocalDate.now().minusDays(7L), LocalDate.now().minusDays(2L));
         for(BoxOfficeData boxOfficeData : kobisScrapper.getBoxOfficesByDate(LocalDate.now().minusDays(2L))){
-
+            System.out.println(boxOfficeData.getCode());
             String poster = KobisScrapper.getMainPosterByCode(boxOfficeData.getCode());
             String[] stillImage = kobisScrapper.getImageUrlsByCode(boxOfficeData.getCode(), KobisScrapper.ImageType.STILL_CUT,true);
 

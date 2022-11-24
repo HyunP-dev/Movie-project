@@ -18,6 +18,5 @@ public class ActorDTO {
 
     private String actorRole;
 
-    private BoxOffice boxOfficeId;
 
 }
